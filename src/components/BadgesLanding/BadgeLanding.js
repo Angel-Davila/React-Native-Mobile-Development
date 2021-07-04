@@ -1,17 +1,16 @@
 import React from 'react';
 import { 
-        View, 
-        Text, 
-        StyleSheet, 
-        ImageBackground, 
-        TouchableOpacity, 
-        StatusBar 
+    View, 
+    Text, 
+    StyleSheet, 
+    ImageBackground, 
+    TouchableOpacity, 
+    StatusBar 
     } from 'react-native';
 import Colors from '../../res/Colors'
 
 const imageBackground = {
     uri: 'https://images.pexels.com/photos/7972200/pexels-photo-7972200.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-
 };
 
 class BadgeLanding extends React.Component{

@@ -5,6 +5,8 @@ import BadgeLanding from '../BadgesLanding/BadgeLanding'
 import BadgesDetail from '../BadgesDetail/BadgesDetail'
 import BadgesEdit from '../BadgesEdit/BadgesEdit'
 import Colors from '../../res/Colors'
+import BadgesLogin from '../BadgesLogin/BadgesLogin'
+import BadgesSignin from '../BadgesSignin/BadgesSignin'
 
 
 
@@ -24,6 +26,9 @@ const BadgesStack = () => {
             <Stack.Screen name="Badges" component={BadgesScreen} />
             <Stack.Screen name="BadgesDetail" component={BadgesDetail} />
             <Stack.Screen name="BadgesEdit" component={BadgesEdit} />
+            <Stack.Screen name="BadgesLogin" component={BadgesLogin} options={{ headerShown: false}}/>
+            <Stack.Screen name="BadgesSignin" component={BadgesSignin} options={{ headerShown: false}}/>
+
         </Stack.Navigator>
     );
 

@@ -32,12 +32,16 @@ class BadgesDetail extends React.Component{
                     <Text style={styles.city}>{badge.city}</Text>
                     <View style={styles.data}>
                         <View style={styles.dataColumns}>
-                            <Text style={styles.dataInfo}>{badge.bets || "0K"} </Text>
-                            <Text style={styles.smallText}>Bets</Text>
+                            <Text style={styles.dataInfo}>{badge.followers || "0"} </Text>
+                            <Text style={styles.smallText}>followers</Text>
                         </View>
                         <View style={styles.dataColumns}>
-                            <Text style={styles.dataInfo}>{badge.state || "None"} </Text>
-                            <Text style={styles.smallText}>State</Text>
+                            <Text style={styles.dataInfo}>{badge.likes || "None"} </Text>
+                            <Text style={styles.smallText}>likes</Text>
+                        </View>
+                        <View style={styles.dataColumns}>
+                            <Text style={styles.dataInfo}>{badge.post || "None"} </Text>
+                            <Text style={styles.smallText}>post</Text>
                         </View>
                     </View>
                 </View>

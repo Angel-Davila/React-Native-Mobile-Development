@@ -1,4 +1,6 @@
 import React from 'react';
+
+
 import { 
     View, 
     Text, 
@@ -15,8 +17,11 @@ const imageBackground = {
 
 class BadgeLanding extends React.Component{
     
-    handlePress = () => {
-        this.props.navigation.navigate('Badges');
+    handlePress1 = () => {
+        this.props.navigation.navigate('BadgesLogin');
+    };
+    handlePress2 = () => {
+        this.props.navigation.navigate('BadgesSignin');
     };
 
     render(){
@@ -28,11 +33,18 @@ class BadgeLanding extends React.Component{
                         <Text style={styles.title}>
                             Welcome {'\n'}to my {'\n'}App
                         </Text>    
-                        <TouchableOpacity style={styles.button} onPress={this.handlePress}>
+                        <TouchableOpacity style={styles.button} onPress={this.handlePress1}>
                             <Text style={styles.buttonText}>
-                                Welcome
+                                LogIn
                             </Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.button} onPress={this.handlePress2}>
+                            <Text style={styles.buttonText}>
+                                SignIn
+                            </Text>
+                        </TouchableOpacity>
+
                     </View>                        
                 </ImageBackground>
             </View>
@@ -65,7 +77,7 @@ const styles = StyleSheet.create({
     },
     button:{
         padding: 15,
-        marginTop:'50%',
+        marginTop:'15%',
         borderRadius: 15,
         backgroundColor: '#121212cc',
         borderColor: Colors.white,

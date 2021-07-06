@@ -5,7 +5,6 @@ import {
     StyleSheet,
     TextInput,
     ScrollView,
-    TouvhableOpacity,
     Image,
     ActivityIndicator,
     TouchableOpacity,
@@ -31,12 +30,12 @@ class BadgesEdit extends react.Component{
         this.props.navigation.setOptions({title: `Edit ${item.name}`});
     };
 
-    handleSubmit = async () => {
+    handleSubmit = async () =>{
         await Http.instance.put(
             this.state.badge._id, 
             this.state.form);
         this.props.navigation.replace('Badges')
-    }
+      }
 
     render(){
         const {badge, loading} = this.state;
@@ -54,63 +53,85 @@ class BadgesEdit extends react.Component{
         }
         return(
             <ScrollView style={styles.container}>
-                <View style={styles.content}>
-                    <Image style={styles.header} source={{uri: `${badge.header_img_url}`}} />
-                    <Image style={styles.profileImage} source={{uri: `${badge.profile_picture_url}`}} />
-                    <View style={styles.form}>
-                        <Text style={styles.inputText}>Name</Text>
-                        <TextInput style={styles.input} placeholder={`${badge.name}`} 
-                        onChangeText={text => {
-                            this.setState( prevState => {
-                                let form = Object.assign({},prevState.form);
-                                form.name = text;
-                                return {form};
-                            })
-                        }}
-                        />
-                        <Text style={styles.inputText}>Age</Text>
-                        <TextInput style={styles.input} placeholder={`${badge.age}`} 
-                        onChangeText={text => {
-                            this.setState( prevState => {
-                                let form = Object.assign({},prevState.form);
-                                form.age = text;
-                                return {form};
-                            })
-                        }}
-                        />
-                        <Text style={styles.inputText}>City</Text>
-                        <TextInput style={styles.input} placeholder={`${badge.city}`} 
-                        onChangeText={text => {
-                            this.setState( prevState => {
-                                let form = Object.assign({},prevState.form);
-                                form.city = text;
-                                return {form};
-                            })
-                        }}
-                        />
-                        <Text style={styles.inputText}>Bets</Text>
-                        <TextInput style={styles.input} placeholder={`${badge.bets}`} 
-                        onChangeText={text => {
-                            this.setState( prevState => {
-                                let form = Object.assign({},prevState.form);
-                                form.bets = text;
-                                return {form};
-                            })
-                        }}
-                        />
-                        <Text style={styles.inputText}>State</Text>
-                        <TextInput style={styles.input} placeholder={`${badge.state}`} 
-                        onChangeText={text => {
-                            this.setState( prevState => {
-                                let form = Object.assign({},prevState.form);
-                                form.state = text;
-                                return {form};
-                            })
-                        }}
-                        />
-                        <TouchableOpacity style={styles.submit} onPress={this.handleSubmit}>
-                            <Text style={styles.submitText}>Save</Text>
-                        </TouchableOpacity>
+              <View style={styles.content}>
+                <Image style={styles.header} source={{uri:`${badge.header_img_url}`}}/>
+                <Image style={styles.profileImage} source={{uri:`${badge.profile_picture_url}`}}/>
+                <View style={styles.form}>
+                    <Text style={styles.inputText}>Name</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={`${badge.name}`} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.name = text;
+                            return {form}
+                        })
+                    }}
+                    />
+                    <Text style={styles.inputText}>Age</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={`${badge.age}`} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.age = text;
+                            return {form}
+                        })
+                    }}
+                    />
+                    <Text style={styles.inputText}>City</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={`${badge.city}`} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.city = text
+                            return {form}
+                        })
+                    }}
+                    />
+                    <Text style={styles.inputText}>Followers</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={badge.followers ? `${badge.followers}` : '0'} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.followers = text
+                            return {form}
+                        })
+                    }}
+                    />
+                    <Text style={styles.inputText}>Likes</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={badge.likes ? `${badge.likes}` : '0'} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.likes = text
+                            return {form}
+                        })
+                    }}
+                    />
+                    <Text style={styles.inputText}>Posts</Text>
+                    <TextInput 
+                        style={styles.input} 
+                        placeholder={badge.post ? `${badge.post}` : '0'} 
+                        onChangeText={text =>{
+                        this.setState(prevState => {
+                            let form = Object.assign({},prevState.form)
+                            form.post = text
+                            return {form}
+                        });
+                    }}
+                    />
+                    <TouchableOpacity style={styles.submit} onPress={this.handleSubmit}>
+                        <Text style={styles.submitText}>Save</Text>
+                    </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>

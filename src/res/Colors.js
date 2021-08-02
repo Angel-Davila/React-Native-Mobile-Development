@@ -4,7 +4,8 @@ const Colors = {
     zircon: '#3a4049',
     white: '#efefef',
     pink: '#E3A6E6',
-    black: '#000000'
+    black: '#000000',
+    green: '#4DD663',
 };
 
 export default Colors;

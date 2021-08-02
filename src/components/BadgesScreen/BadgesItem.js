@@ -20,22 +20,23 @@ class BadgesItem extends React.Component {
                         <View style={styles.userData}>
                             <Text style={styles.nameText}> {item.name}</Text>
                             <Text style={styles.cityText}> {item.city}</Text>
-
                         </View>
                     </View>
                 </TouchableOpacity>
-                <View>
-                    <Pressable>
-                        <Image style={styles.icons} />
-                    </Pressable>
-                    <Pressable onPress={this.props.onEdit}>
-                        <Image style={styles.editIcon}
-                        source={require('../../assets/edit.png')} />
-                    </Pressable>
-                    <Pressable onPress={this.props.onDelete}>
-                        <Image style={styles.deleteIcon}
-                        source={require('../../assets/delete.png')} />
-                    </Pressable>
+                <View style={styles.icons}>
+                    {this.props.onEdit ? (
+                        <Pressable onPress={this.props.onEdit}>
+                            <Image 
+                                style={styles.editIcon}
+                                source={require('../../assets/edit.png')} />
+                        </Pressable>
+                    ) : null}
+                    {this.props.onDelete ? (
+                        <Pressable onPress={this.props.onDelete}>
+                            <Image style={styles.deleteIcon}
+                            source={require('../../assets/delete.png')} />
+                        </Pressable>
+                    ) : null}
                 </View>
             </View>
         );

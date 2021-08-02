@@ -14,13 +14,13 @@ import {
 } from 'react-native';
 
 import Colors from '../../res/Colors.js';
-
+import UserSession from '../../libs/sessions.js';
 
 class Login extends React.Component{
 
 
     handlepress = () => {
-        this.props.navigation.navigate('Badges');
+        this.props.navigation.navigate('BadgesTabNavigator');
     };
 
     handlepress2 = () => {

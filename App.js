@@ -8,7 +8,7 @@ const App = () => {
       <AppStack/>
     </NavigationContainer>
   );
-};
+}; 
 
 export default App;
 

@@ -2,7 +2,8 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProfileEdit from './ProfileEdit';
 import Colors from '../../res/Colors';
-import {ScrollView, Text, StyleSheet, View, Image} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker'
+import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import UserSession from '../../libs/sessions';
 
 const Icon = {
@@ -15,7 +16,8 @@ class Profile extends React.Component {
     user: {
       profile:{},
     },
-    token: {},
+    token: '',
+    picture: {},
   };
 
   componentDidMount = () => {
@@ -29,30 +31,28 @@ class Profile extends React.Component {
   };
 
   handleChooseProfileImage = () => {
-      const options = {};
+      const options = {
+        includeBase64: false,
+        mediaType: 'photo',
+      };
       launchImageLibrary(options, response => {
-          let photo = response.assets[0].uri;
-          this.setState({picture:photo});
+        if(!response.didCancel){
+            let photo = response.assets[0].uri;
+            this.setState({picture:photo});
+            this.editProfilePicture();
+          }  
       });
-      this.editProfilePicture();
   };
 
   editProfilePicture = async () => {
       const {user, token, picture} = this.state;
-      let uploadData = new FormData();
-      uploadData.append('submit', 'ok')
-      uploadData.append('file', {
-          type: 'image/jpg',
-          uri: picture,
-          name: 'profile.jpg'
-      });
-
-      try{
-        let response = await UserSession.instance.editProfile(user.id, token, uploadData);
-        console.log(response);
-      }catch(err){
-          console.log('Edit profile picture error', err)
-      }
+      let response = await UserSession.instance.editProfile(
+        user.id, 
+        token, 
+        picture
+      )
+      console.log(response)
+      this.setState({user: response})
   };
 
   render() {
@@ -65,13 +65,17 @@ class Profile extends React.Component {
                 style={styles.header}
                 source={{uri: `${user.profile.header_img}`}}
               />
+              
               <Image
                 style={styles.profileImage}
                 source={{uri: `${user.profile.profile_picture}`}}
               />
-              <Image style={styles.icon} source={Icon} />
-              
 
+              <TouchableOpacity style={styles.clickabeImage} onPress={this.handleChooseProfileImage}>
+                
+                <Image style={styles.icon} source={require('../../assets/picture.png')}/>
+              </TouchableOpacity>
+              
               <View style={styles.userInfo}>
                 <Text style={styles.name}>{user.first_name}</Text>
                 <Text style={styles.lastname}>{user.last_name}</Text>
@@ -88,18 +92,30 @@ class Profile extends React.Component {
 const styles = StyleSheet.create({
   
   container: {
-    flex: 1,
     backgroundColor: Colors.charade,
+    height: '100%',
+    width: '100%',
   },
+  clickabeImage: {
+    width: 25,
+    height: 30,
+    position: 'absolute',
+    left: 225,
+    top: 325
+
+  },
+  
   icon:{
-    width: 150,
+    width: 30,
+    height: 30,
+    
   },
+
   badge: {
     flex: 1,
+    flexDirection: 'column',
     margin: 20,
     marginTop: 45,
-    width: '90%',
-    height: '90%',
     backgroundColor: Colors.white,
     borderRadius: 25,
   },
@@ -118,7 +134,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     position: 'absolute',
     top: 170,
-    left: '21%',
+    left: '22%',
   },
 
   userInfo: {

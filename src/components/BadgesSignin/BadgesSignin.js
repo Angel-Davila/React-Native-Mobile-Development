@@ -25,49 +25,40 @@ class Signin extends React.Component{
     };
 
     handlePress = async () => {
-        try {
-            //We set the userr as undefined and loading as true
-            this.setState({loading: true, user: undefined});
-            //We send the form to signup
-            let response = await UserSession.instance.signup(this.state.form);
-            
-             //if we get an object as response we show the error
-            if (typeof response == 'object') {
-              let errors = [];
-              let cont = 0;
-      
-              for (let error in response) {
-                let key = error;
-                if (error == 'non_field_errors') {
-                  error = 'password';
+        try{
+            this.setState({loading:true, user:undefined})
+            let response = await UserSession.instance.signup(this.state.form)
+            if (typeof response === 'object'){
+                let errors = []
+                let cont = 0
+                
+                for(let error in response) {
+                    let key = error
+                    if(error === 'non_field_errors'){
+                    error = 'password'
+                    }
+                    errors.push(
+                    <View key={cont}>
+                        <Text style={styles.warningText}>
+                        {`${error} : ${response[key][0]}`}
+                        </Text>
+                    </View>
+                    )
+                    cont++
                 }
-      
-                errors.push(
-                  <View key={cont}>
-                    <Text>{`${error} : ${response[key][0]}`}</Text>
-                  </View>,
-                );
-                cont++;
-              }
-              //we save the errors in errors to show them
-              this.setState({loading: false, user: undefined, errors: errors});
+                this.setState({loading:false, user:undefined, errors: errors, error:true})
             } else {
-              //if we did not have errors we save the user data
-              this.setState({
-                loading: false,
-                user: response,
-                errors: [],
-              });
-              //we send the user to login
-              if (this.state.user) {
-                this.props.navigation.navigate('Login');
-              }
-            }
-          } catch (err) {
-            console.log('Sign up err', err);
-            throw Error(err);
-          }
-        };
+                this.setState({loading:false, error: false, user:response, errors:[]})
+                }
+        } catch (error) {
+            console.log('Signup error', error)
+            throw Error(error)
+        }
+        if(this.state.user){
+            this.props.navigation.navigate('BadgesLogin')
+        }
+    };
+
     toggleisPasswordVisible = () => {
         if (this.state.isPasswordVisible) {
             this.setState({isPasswordVisible: false});
@@ -75,6 +66,7 @@ class Signin extends React.Component{
             this.setState({isPasswordVisible: true});
             }
         };
+
     toggleisPasswordConfirmationVisible = () => {
         if (this.state.isPasswordConfirmationVisible) {
             this.setState({isPasswordConfirmationVisible: false});
@@ -83,10 +75,10 @@ class Signin extends React.Component{
             }
         };
 
-
     render(){
-        const {isPasswordVisible, isPasswordConfirmationVisible, loading, error, user} = this.state;
-        if (loading === true && !user) {
+        const {isPasswordVisible, isPasswordConfirmationVisible, loading, errors} = this.state;
+        
+        if (loading === true){
         return <Loader />;
         }
 
@@ -98,6 +90,7 @@ class Signin extends React.Component{
                             <View style={styles.form}>
                                 <Text style={styles.title}>SignUp</Text>
                                 <Image style={styles.logo} source={{uri:'https://image.flaticon.com/icons/png/512/3025/3025015.png'}}/>
+                                <View style={styles.errorContainer}>{errors}</View>
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Username"
@@ -307,8 +300,18 @@ const styles = StyleSheet.create({
         width:50,
         resizeMode: 'cover',
         alignItems: 'flex-end'
-    }
+    },
 
+    errorMsg: {
+        color: '#990009',
+    },
+
+    errorContainer: {
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        backgroundColor: '#FF353C40',
+        borderRadius: 5,
+    },
     
 });
     export default Signin;

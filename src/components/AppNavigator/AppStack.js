@@ -26,11 +26,21 @@ const AppStack = () => {
                 name = 'Landing' 
                 component = {BadgeLanding} 
                 option = {{headerShown: false} }/>
+
             <Stack.Screen 
                 name = 'BadgesTabNavigator' 
                 component = {BadgesTabNavigator} />
-            <Stack.Screen name="BadgesLogin" component={BadgesLogin} options={{ headerShown: false}}/>
-            <Stack.Screen name="BadgesSignin" component={BadgesSignin} options={{ headerShown: false}}/>
+
+            <Stack.Screen 
+                name="BadgesLogin" 
+                component={BadgesLogin} 
+                options={{ headerShown: false}}/>
+
+            <Stack.Screen 
+                name="BadgesSignin" 
+                component={BadgesSignin} 
+                options={{ headerShown: false}}/>
+                 
         </Stack.Navigator>
     )
 };

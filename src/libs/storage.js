@@ -48,7 +48,18 @@ class Storage {
             console.log('Storage delete error', err);
             throw Error(err);
         }
-    };
-}
+
+    }
+    multiRemove = async keys =>{
+        try {
+            await AsyncStorage.multiRemove(keys)
+            return true
+        } catch (error) {
+            console.log('Multiremove error', error)
+            return false
+        }
+    }
+};
+
 
 export default Storage;

@@ -33,21 +33,29 @@ class Login extends React.Component{
     
     handleSubmit = async () => {
         try {
-            this.setState({loading: true, error:null, user: undefined});
-            let response = await UserSession.instance.login(this.state.form);    
-            
-            if (typeof response === 'object') {
-                this.setState({loading: false, error: response, user: undefined});
-            } else {
-                this.setState({loading: false, error: null, user: response});
+            this.setState({loading:true, error:null, user:undefined})
+            let response = await UserSession.instance.login(this.state.form)
+      
+            if (typeof response === 'object'){
+              console.log(response)
+              if (response["Login Error"]){
+                var message = "Account is not verified."
+              } else {
+                var message = "Invalid credentials. Try again."
+              }
+              this.setState({loading:false, error: message, user: undefined})
+            }else {
+              this.setState({loading:false, error: null, user:response})
             }
-        }catch (err){
-            this.setState({loading: false, error: err});
-        }
-        if(this.state.user){
-            this.props.navigation.replace('BadgesTabNavigator');
-        }
+          } catch (err) {
+              this.setState({loading:false, error:err})
+              console.log(err)
+          }
+          if(this.state.user){
+            this.props.navigation.replace('BadgesTabNavigator')
+          }
     };
+   
 
     toggleisPasswordVisible = () => {
     if (this.state.isPasswordVisible) {
@@ -64,7 +72,7 @@ class Login extends React.Component{
     render(){
 
         const {isPasswordVisible, loading, error, user} = this.state;
-        if (loading === true && !user) {
+        if (loading === true) {
         return <Loader />;
         }
         return(
@@ -73,7 +81,6 @@ class Login extends React.Component{
                 <StatusBar backgroundColor="transparent" translucent={true}/>
                     <ImageBackground source={{uri: 'https://images.pexels.com/photos/7972200/pexels-photo-7972200.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'}} style={styles.image}>
                         <View style={styles.layerColor}>
-
                             <View style={styles.form}>
                                 <Text style={styles.title}>Login</Text>
                                 {error ? (
@@ -134,76 +141,6 @@ class Login extends React.Component{
                         </View>
                     </ImageBackground>
             </View>
-
-            /*
-            <KeyboardAvoidingView
-                style={styles.containerKey}>
-                    <ImageBackground source={{uri: 'https://images.pexels.com/photos/7972200/pexels-photo-7972200.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'}} style={styles.image}>
-                        <View style={styles.layerColor}>
-
-                            <ScrollView style={styles.container}>
-                                <View style={styles.content}>
-                                    <Image style={styles.logo} source={{uri:'https://image.flaticon.com/icons/png/512/3025/3025015.png'}}/>
-                                    <View style={styles.form}>
-                                        <Text style={styles.inputText}>Username</Text>
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="Username"
-                                            placeholderTextColor={Colors.charade}
-                                            onChangeText={text => {
-                                            this.setState(prevState => {
-                                                let form = Object.assign({}, prevState.form);
-                                                form.username = text;
-                                                return {form};
-                                            });
-                                            }}
-                                        />
-                                        <TextInput
-                                            style={styles.input}
-                                            secureTextEntry={isPasswordVisible}
-                                            placeholder="Password"
-                                            placeholderTextColor={Colors.charade}
-                                            onChangeText={text => {
-                                            this.setState(prevState => {
-                                                let form = Object.assign({}, prevState.form);
-                                                form.password = text;
-                                                return {form};
-                                            });
-                                            }}
-                                        />    
-                                        
-                                    </View>
-
-                                    <TouchableOpacity onPress={this.toggleisPasswordVisible}>
-                                            <Image
-                                            style={{
-                                                marginLeft: 200,
-                                                marginTop: -26,
-                                                width: 16,
-                                                height: 13,
-                                            }}
-                                            source={
-                                                isPasswordVisible
-                                                ? require('../../assets/show.png')
-                                                : require('../../assets/hide.png')
-                                            }
-                                            />
-                                        </TouchableOpacity> 
-
-                                    <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
-                                        <Text style={styles.buttonText}>LogIn</Text>
-                                    </TouchableOpacity>
-
-                                    <Text style={styles.Text}>Not have an account? <Text style={styles.clickableText} onPress={this.handleSignUp}>Register</Text></Text>
-
-                                        
-
-                                </View>
-                            </ScrollView>
-                        </View>
-
-                    </ImageBackground>
-            </KeyboardAvoidingView> */
         );
     }
 }
@@ -219,6 +156,7 @@ const styles = StyleSheet.create({
         color: Colors.charade,
 
     },
+
 
     image:{
         flex: 1,
@@ -321,7 +259,18 @@ const styles = StyleSheet.create({
     },
     clickableText:{
         fontWeight: 'bold'
-    }
+    }, 
+    
+    errorMsg: {
+        color: '#990009',
+    },
+    
+    errorContainer: {
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        backgroundColor: '#FF353C40',
+        borderRadius: 5,
+    },
     
 });
     export default Login;

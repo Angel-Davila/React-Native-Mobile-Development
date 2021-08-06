@@ -178,10 +178,7 @@ const styles = StyleSheet.create({
     },
     smallText:{
         color:Colors.zircon,
-    },
-    
-
-    
+    },    
 })
 
 export default BadgesDetail;

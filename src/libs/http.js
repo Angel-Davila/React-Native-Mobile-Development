@@ -1,6 +1,5 @@
 
-const URLS = 'https://cybernadero-heroku.herokuapp.com';
-
+import URLS from './url'
 
 class Http {
     static instance = new Http()

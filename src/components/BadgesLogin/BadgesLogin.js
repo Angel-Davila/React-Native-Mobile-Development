@@ -7,65 +7,203 @@ import {
     TouchableOpacity,
     Image,
     TextInput,
-    KeyboardAvoidingView,
-    ScrollView,
-    Pressable,
-    Linking
+    StatusBar,
 } from 'react-native';
 
 import Colors from '../../res/Colors.js';
-import UserSession from '../../libs/sessions.js';
+import UserSession from '../../libs/sessions';
+import Loader from '../Generics/Loader'
 
 class Login extends React.Component{
-
-
-    handlepress = () => {
-        this.props.navigation.navigate('BadgesTabNavigator');
+    state = {
+        loading: false,
+        error: null,
+        user: undefined,
+        isPasswordVisible: true,
+        form: {},
     };
 
-    handlepress2 = () => {
+    componentDidMount = () => {
+        this.deleteTokens();
+      };
+    
+    deleteTokens = async () => {
+        await UserSession.instance.logout();
+      };
+    
+    handleSubmit = async () => {
+        try {
+            this.setState({loading: true, error:null, user: undefined});
+            let response = await UserSession.instance.login(this.state.form);    
+            
+            if (typeof response === 'object') {
+                this.setState({loading: false, error: response, user: undefined});
+            } else {
+                this.setState({loading: false, error: null, user: response});
+            }
+        }catch (err){
+            this.setState({loading: false, error: err});
+        }
+        if(this.state.user){
+            this.props.navigation.replace('BadgesTabNavigator');
+        }
+    };
+
+    toggleisPasswordVisible = () => {
+    if (this.state.isPasswordVisible) {
+        this.setState({isPasswordVisible: false});
+    } else {
+        this.setState({isPasswordVisible: true});
+        }
+    };
+
+    handleSignUp = () => {
         this.props.navigation.navigate('BadgesSignin');
     };
 
-
-
     render(){
+
+        const {isPasswordVisible, loading, error, user} = this.state;
+        if (loading === true && !user) {
+        return <Loader />;
+        }
         return(
+
+            <View style={styles.container}>
+                <StatusBar backgroundColor="transparent" translucent={true}/>
+                    <ImageBackground source={{uri: 'https://images.pexels.com/photos/7972200/pexels-photo-7972200.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'}} style={styles.image}>
+                        <View style={styles.layerColor}>
+
+                            <View style={styles.form}>
+                                <Text style={styles.title}>Login</Text>
+                                {error ? (
+                                    <View style={styles.errorContainer}>
+                                        <Text style={styles.errorMessage}>
+                                            {'Invalid username or password'}
+                                        </Text>
+                                    </View> 
+                                ) : null}
+
+                                <Image style={styles.logo} source={{uri:'https://image.flaticon.com/icons/png/512/3025/3025015.png'}}/>
+
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Username"
+                                    placeholderTextColor={Colors.charade}
+                                    onChangeText={text => {
+                                        this.setState(prevState => {
+                                            let form = Object.assign({}, prevState.form);
+                                            form.username = text;
+                                            return {form};
+                                        });
+                                    }}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    secureTextEntry={isPasswordVisible}
+                                    placeholder={'Password'}
+                                    keyboardAppearance="dark"
+                                    placeholderTextColor={Colors.charade}
+                                    onChangeText={text => {
+                                        this.setState(prevState => {
+                                            let form = Object.assign({}, prevState.form);
+                                            form.password = text;
+                                            return {form};
+                                        });
+                                    }}
+                                />
+                                <TouchableOpacity onPress={this.toggleisPasswordVisible}>
+                                    <Image
+                                        style={{
+                                            marginLeft: 200,
+                                            marginTop: -26,
+                                            width: 16,
+                                            height: 13,
+                                        }}
+                                        source={isPasswordVisible ? require('../../assets/show.png') : require('../../assets/hide.png')}
+                                    />
+                            </TouchableOpacity> 
+                                <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+                                    <Text style={styles.buttonText}>LogIn</Text>
+                                </TouchableOpacity>
+
+                                <Text style={styles.Text}>Not have an account? <Text style={styles.clickableText} onPress={this.handleSignUp}>Register</Text></Text>
+
+                            </View>
+                            
+                        </View>
+                    </ImageBackground>
+            </View>
+
+            /*
             <KeyboardAvoidingView
                 style={styles.containerKey}>
                     <ImageBackground source={{uri: 'https://images.pexels.com/photos/7972200/pexels-photo-7972200.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'}} style={styles.image}>
                         <View style={styles.layerColor}>
 
                             <ScrollView style={styles.container}>
-                                    <View style={styles.content}>
-                                        <Image style={styles.logo} source={{uri:'https://image.flaticon.com/icons/png/512/3025/3025015.png'}}/>
-                                        <View style={styles.form}>
-                                            
-                                            <Text style={styles.inputText}>Username</Text>
-                                            <TextInput 
-                                                style={styles.input} 
-                                                placeholder={'Username'}/>
-
-                                            <Text style={styles.inputText}>Password</Text>
-                                            <TextInput 
-                                                style={styles.input} 
-                                                placeholder={'Password'}
-                                                secureTextEntry={true}/>                                          
-                                            <TouchableOpacity style={styles.button} onPress={this.handlepress}>
-                                                <Text style={styles.buttonText}>LogIn</Text>
-                                            </TouchableOpacity>
-
-                                            <Text style={styles.Text}>Not have an account? <Text style={styles.clickableText} onPress={this.handlepress2}>Register</Text></Text>
-
-                                           
-
-                                        </View>
+                                <View style={styles.content}>
+                                    <Image style={styles.logo} source={{uri:'https://image.flaticon.com/icons/png/512/3025/3025015.png'}}/>
+                                    <View style={styles.form}>
+                                        <Text style={styles.inputText}>Username</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Username"
+                                            placeholderTextColor={Colors.charade}
+                                            onChangeText={text => {
+                                            this.setState(prevState => {
+                                                let form = Object.assign({}, prevState.form);
+                                                form.username = text;
+                                                return {form};
+                                            });
+                                            }}
+                                        />
+                                        <TextInput
+                                            style={styles.input}
+                                            secureTextEntry={isPasswordVisible}
+                                            placeholder="Password"
+                                            placeholderTextColor={Colors.charade}
+                                            onChangeText={text => {
+                                            this.setState(prevState => {
+                                                let form = Object.assign({}, prevState.form);
+                                                form.password = text;
+                                                return {form};
+                                            });
+                                            }}
+                                        />    
+                                        
                                     </View>
+
+                                    <TouchableOpacity onPress={this.toggleisPasswordVisible}>
+                                            <Image
+                                            style={{
+                                                marginLeft: 200,
+                                                marginTop: -26,
+                                                width: 16,
+                                                height: 13,
+                                            }}
+                                            source={
+                                                isPasswordVisible
+                                                ? require('../../assets/show.png')
+                                                : require('../../assets/hide.png')
+                                            }
+                                            />
+                                        </TouchableOpacity> 
+
+                                    <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+                                        <Text style={styles.buttonText}>LogIn</Text>
+                                    </TouchableOpacity>
+
+                                    <Text style={styles.Text}>Not have an account? <Text style={styles.clickableText} onPress={this.handleSignUp}>Register</Text></Text>
+
+                                        
+
+                                </View>
                             </ScrollView>
                         </View>
 
                     </ImageBackground>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> */
         );
     }
 }
@@ -79,7 +217,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         color: Colors.charade,
-       
 
     },
 
@@ -117,9 +254,15 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        width: 200,
-        height: 200,
+        width: 100,
+        height: 100,
         marginTop: 15,
+    },
+
+    title:{
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginTop: 50
     },
 
     inputText:{
@@ -134,10 +277,12 @@ const styles = StyleSheet.create({
     input:{
         paddingVertical:5,
         paddingHorizontal:10,
-        borderWidth:1,
         borderRadius:10,
+        borderBottomWidth: 1,
         borderColor:Colors.blacks,
         width:250,
+        marginTop: 30,
+        width: 200
     },
 
     button:{
@@ -173,8 +318,10 @@ const styles = StyleSheet.create({
         width:50,
         resizeMode: 'cover',
         alignItems: 'flex-end'
+    },
+    clickableText:{
+        fontWeight: 'bold'
     }
-
     
 });
     export default Login;

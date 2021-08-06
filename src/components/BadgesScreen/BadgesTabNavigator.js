@@ -12,12 +12,11 @@ const BadgesTabNavigator = () => {
     return(
         <Tabs.Navigator 
             tabBarOptions={{
-                showLabel: true,
-                tintColor: Colors.white,
+                showLabel: false,
+                tintColor: Colors.pink,
                 activeTintColor: Colors.pink,
                 style:{
                     backgroundColor: Colors.zircon,
-                    paddingTop: 30,
                 },
             }}>
             <Tabs.Screen 
